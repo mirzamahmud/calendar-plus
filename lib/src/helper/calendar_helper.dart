@@ -1,21 +1,45 @@
 import 'package:calendar_plus/calendar_plus.dart';
 import 'package:flutter/material.dart';
 
+/// A helper/controller class for [CalendarPlus].
+///
+/// Manages calendar state such as the current focused month, selection modes,
+/// and event storage. It also provides utility methods for generating days
+/// in a month or week, handling user taps, and managing events.
 class CalendarHelper extends ChangeNotifier {
+  /// Abbreviated names of weekdays (starting from Sunday).
+  ///
+  /// You can override or localize this list if needed.
   List<String> weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  /// The currently focused month (used for rendering).
   DateTime focusedMonth = DateTime.now();
+
+  /// The currently selected date when in [CalendarSelectionMode.SINGLE].
   DateTime? selectedDate;
 
-  // Range selection for multi-select
+  /// The starting date of a selection range (used for multiple/range mode).
   DateTime? rangeStart;
+
+  /// The ending date of a selection range (used for multiple/range mode).
   DateTime? rangeEnd;
 
+  /// A set of all selected dates in [CalendarSelectionMode.MULTIPLE].
   final Set<DateTime> selectedDates = {};
 
-  /// Store events grouped by date
+  /// Stores all events, grouped by day.
+  ///
+  /// Each [DateTime] key is normalized to `year, month, day` (time ignored).
   final Map<DateTime, List<CalendarEventModel>> calenderEvent = {};
 
-  /// Get all days to display in the current month grid
+  /* ===========================================================================
+    Calendar Days
+  =========================================================================== */
+
+  /// Returns all [DateTime]s required to render the current month grid.
+  ///
+  /// Includes "leading" days from the previous month if the first day of the
+  /// month does not start on Sunday (index 0).
   List<DateTime> daysInMonth(DateTime month) {
     final firstDay = DateTime(month.year, month.month, 1);
     final lastDay = DateTime(month.year, month.month + 1, 0);
@@ -27,21 +51,33 @@ class CalendarHelper extends ChangeNotifier {
     });
   }
 
+  /* ===========================================================================
+    Navigation
+  =========================================================================== */
+
+  /// Moves the calendar forward by one month.
   void nextMonth() {
     focusedMonth = DateTime(focusedMonth.year, focusedMonth.month + 1);
     notifyListeners();
   }
 
+  /// Moves the calendar backward by one month.
   void prevMonth() {
     focusedMonth = DateTime(focusedMonth.year, focusedMonth.month - 1);
     notifyListeners();
   }
 
+  /// Updates the focused month to [month].
   void setMonth(DateTime month) {
     focusedMonth = month;
     notifyListeners();
   }
 
+  /* ===========================================================================
+    Selection
+  =========================================================================== */
+
+  /// Returns `true` if the given [day] is selected, depending on [selectionMode].
   bool isSelected(DateTime day, CalendarSelectionMode selectionMode) {
     if (selectionMode == CalendarSelectionMode.SINGLE) {
       return selectedDate != null &&
@@ -55,6 +91,11 @@ class CalendarHelper extends ChangeNotifier {
     }
   }
 
+  /// Returns the background color for a given [day].
+  ///
+  /// - Blue if selected
+  /// - Light blue if today
+  /// - Transparent otherwise
   Color getCellColor(DateTime day, CalendarSelectionMode selectionMode) {
     final isToday =
         day.year == DateTime.now().year &&
@@ -66,7 +107,7 @@ class CalendarHelper extends ChangeNotifier {
     return Colors.transparent;
   }
 
-  /// Handle day taps for single or range selection
+  /// Handles day taps for [CalendarSelectionMode.SINGLE] or range/multiple mode.
   void onDayTap(
     DateTime day,
     bool isCurrentMonth,
@@ -108,12 +149,14 @@ class CalendarHelper extends ChangeNotifier {
   /* ===========================================================================
     Events
   =========================================================================== */
+
+  /// Returns all events for the given [day].
   List<CalendarEventModel> getEventsForDay(DateTime day) {
     final dateKey = DateTime(day.year, day.month, day.day);
     return calenderEvent[dateKey] ?? [];
   }
 
-  //* ADD NEW EVENT
+  /// Adds a new [event] for the given [day].
   void addEvent(DateTime day, CalendarEventModel event) {
     final dateKey = DateTime(day.year, day.month, day.day);
     if (calenderEvent[dateKey] == null) {
@@ -123,7 +166,9 @@ class CalendarHelper extends ChangeNotifier {
     notifyListeners();
   }
 
-  //* REMOVE EVENT
+  /// Removes an [event] from the given [day].
+  ///
+  /// If no events remain for that date, the entry is removed entirely.
   void removeEvent(DateTime day, CalendarEventModel event) {
     final dateKey = DateTime(day.year, day.month, day.day);
     calenderEvent[dateKey]?.remove(event);
@@ -133,32 +178,13 @@ class CalendarHelper extends ChangeNotifier {
     notifyListeners();
   }
 
-  //* CLEAR EVENT
+  /// Clears all events for the given [day].
   void clearEvents(DateTime day) {
     final dateKey = DateTime(day.year, day.month, day.day);
     calenderEvent.remove(dateKey);
     notifyListeners();
   }
 
-  //* CHECK HAS EVENT
+  /// Returns `true` if [day] has at least one event.
   bool hasEvents(DateTime day) => getEventsForDay(day).isNotEmpty;
-
-  void setSelectedDate(DateTime day) {
-    selectedDate = DateTime(day.year, day.month, day.day);
-    notifyListeners();
-  }
-
-  List<DateTime> daysInWeek(DateTime date) {
-    // In Dart, week starts on Monday (weekday=1) and ends on Sunday (weekday=7).
-    final int weekday = date.weekday;
-    final DateTime firstDayOfWeek = date.subtract(Duration(days: weekday - 1));
-    return List.generate(
-      7,
-      (index) => DateTime(
-        firstDayOfWeek.year,
-        firstDayOfWeek.month,
-        firstDayOfWeek.day + index,
-      ),
-    );
-  }
 }

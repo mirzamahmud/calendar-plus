@@ -2,7 +2,29 @@ import 'package:calendar_plus/src/helper/calendar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// A utility class that provides a dialog for picking both
+/// a **year** and a **month**.
+///
+/// This is used inside [CalendarPlus] to let users quickly
+/// navigate to a specific month and year.
 class ShowYearAndMonthPicker {
+  /// Displays a dialog to pick a year first, and then a month.
+  ///
+  /// - First shows a **Year Picker** dialog (±25 years from current year).
+  /// - Once a year is selected, shows a **Month Picker** dialog for that year.
+  /// - Updates the [calendarHelper] with the selected month and year.
+  ///
+  /// Example:
+  /// ```dart
+  /// ShowYearAndMonthPicker.showYearMonthPicker(
+  ///   context,
+  ///   calendarHelper: myCalendarHelper,
+  /// );
+  /// ```
+  ///
+  /// [context] — BuildContext of the widget that triggers the dialog.
+  /// [calendarHelper] — The controller that manages the current
+  /// focused month of the calendar.
   static Future<void> showYearMonthPicker(
     BuildContext context, {
     required CalendarHelper calendarHelper,
@@ -100,6 +122,7 @@ class ShowYearAndMonthPicker {
         },
       );
 
+      // Update CalendarHelper with the new year & month
       if (pickedMonth != null) {
         calendarHelper.setMonth(DateTime(pickedYear, pickedMonth));
       }
