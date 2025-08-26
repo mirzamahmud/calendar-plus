@@ -1,0 +1,1 @@
+enum CalendarSelectionMode { SINGLE, MULTIPLE }
