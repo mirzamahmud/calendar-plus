@@ -5,7 +5,7 @@ class EventContext extends StatelessWidget {
   /// A custom title widget displayed above the event list.
   ///
   /// If `null`, a default title will be shown:
-  ///  - For [CalendarSelectionMode.SINGLE], it shows "Events on <day-month-year>".
+  ///  - For [CalendarSelectionMode.SINGLE], it shows "Events on [day-month-year]".
   ///  - For [CalendarSelectionMode.MULTIPLE], it shows "Events for selected dates".
   final Widget? title;
 

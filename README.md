@@ -32,7 +32,7 @@ Add this line to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flex_calendar_plus: ^1.0.1
+  flex_calendar_plus: ^1.0.2
 ```
 
 Or write in the terminal:
