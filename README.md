@@ -32,13 +32,13 @@ Add this line to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  calendar_plus: ^0.0.1
+  flex_calendar_plus: ^0.0.1
 ```
 
 Or write in the terminal:
 
 ```bash
-flutter pub add calendar_plus
+flutter pub add flex_calendar_plus
 ```
 
 Then run:
@@ -54,7 +54,7 @@ flutter pub get
 Basic Calendar
 
 ```dart
-import 'package:calendar_plus/calendar_plus.dart';
+import 'package:flex_calendar_plus/flex_calendar_plus.dart';
 
 class MyCalendar extends StatelessWidget {
   @override
