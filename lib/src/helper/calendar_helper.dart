@@ -1,4 +1,4 @@
-import 'package:calendar_plus/src/enum/calendar_selection_mode.dart';
+import 'package:calendar_plus/calendar_plus.dart';
 import 'package:flutter/material.dart';
 
 class CalendarHelper extends ChangeNotifier {
@@ -11,6 +11,9 @@ class CalendarHelper extends ChangeNotifier {
   DateTime? rangeEnd;
 
   final Set<DateTime> selectedDates = {};
+
+  /// Store events grouped by date
+  final Map<DateTime, List<CalendarEventModel>> calenderEvent = {};
 
   /// Get all days to display in the current month grid
   List<DateTime> daysInMonth(DateTime month) {
@@ -100,5 +103,62 @@ class CalendarHelper extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  /* ===========================================================================
+    Events
+  =========================================================================== */
+  List<CalendarEventModel> getEventsForDay(DateTime day) {
+    final dateKey = DateTime(day.year, day.month, day.day);
+    return calenderEvent[dateKey] ?? [];
+  }
+
+  //* ADD NEW EVENT
+  void addEvent(DateTime day, CalendarEventModel event) {
+    final dateKey = DateTime(day.year, day.month, day.day);
+    if (calenderEvent[dateKey] == null) {
+      calenderEvent[dateKey] = [];
+    }
+    calenderEvent[dateKey]!.add(event);
+    notifyListeners();
+  }
+
+  //* REMOVE EVENT
+  void removeEvent(DateTime day, CalendarEventModel event) {
+    final dateKey = DateTime(day.year, day.month, day.day);
+    calenderEvent[dateKey]?.remove(event);
+    if (calenderEvent[dateKey]?.isEmpty ?? false) {
+      calenderEvent.remove(dateKey);
+    }
+    notifyListeners();
+  }
+
+  //* CLEAR EVENT
+  void clearEvents(DateTime day) {
+    final dateKey = DateTime(day.year, day.month, day.day);
+    calenderEvent.remove(dateKey);
+    notifyListeners();
+  }
+
+  //* CHECK HAS EVENT
+  bool hasEvents(DateTime day) => getEventsForDay(day).isNotEmpty;
+
+  void setSelectedDate(DateTime day) {
+    selectedDate = DateTime(day.year, day.month, day.day);
+    notifyListeners();
+  }
+
+  List<DateTime> daysInWeek(DateTime date) {
+    // In Dart, week starts on Monday (weekday=1) and ends on Sunday (weekday=7).
+    final int weekday = date.weekday;
+    final DateTime firstDayOfWeek = date.subtract(Duration(days: weekday - 1));
+    return List.generate(
+      7,
+      (index) => DateTime(
+        firstDayOfWeek.year,
+        firstDayOfWeek.month,
+        firstDayOfWeek.day + index,
+      ),
+    );
   }
 }
