@@ -1,6 +1,6 @@
+import 'package:flex_calendar_plus/flex_calendar_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:calendar_plus/calendar_plus.dart';
 
 void main() {
   testWidgets('CalendarPlus shows bottom sheet with events when day tapped', (

@@ -1,4 +1,4 @@
-import 'package:calendar_plus/calendar_plus.dart';
+import 'package:flex_calendar_plus/flex_calendar_plus.dart';
 import 'package:flutter/material.dart';
 
 class EventContext extends StatelessWidget {

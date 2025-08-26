@@ -1,4 +1,4 @@
-# 📅 calendar_plus
+# 📅 flex_calendar_plus
 
 ---
 
