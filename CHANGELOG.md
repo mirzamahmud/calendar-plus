@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Initial release of `flex-calendar-plus`.
+- Initial release of `flex_calendar_plus`.
 - Display calendar grid for a given month.
 - Support for **single** and **multiple (range)** date selection modes.
 - Customizable **header** with optional builder.
