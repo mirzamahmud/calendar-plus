@@ -1,6 +1,6 @@
 name: flex_calendar_plus
 description: "A customizable Flutter calendar widget with single & multiple date selection, event management, custom headers, and draggable event bottom sheets."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/mirzamahmud/flex_calendar_plus
 repository: https://github.com/mirzamahmud/flex_calendar_plus
 issue_tracker: https://github.com/mirzamahmud/flex_calendar_plus/issues
